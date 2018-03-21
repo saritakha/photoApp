@@ -1,0 +1,93 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  max-height: 80vwh;
+  max-width: 90%;
+}
+
+/* adding effect to ul*/
+ul{
+    display: grid;
+    grid-template-columns:  repeat(3,1fr);
+    justify-content: center;
+    list-style-type: none;
+}
+
+/* adding effect to div */
+ul div{
+  padding: 10px;
+  border: 0.5px solid grey;
+  margin: 20px;
+}
+
+/* making image in center */
+img{
+width: 100%;
+}
+
+/*style for the title */
+h2 , h4{
+padding: 7px;
+text-align: center;
+}
+
+/* effect for all button  */
+button{
+  border-radius: 7px;
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  font-size: 15px;
+  overflow: hidden;
+}
+
+/* effect button inside div */
+ul div button{
+margin: auto;
+display: block;
+}
+
+/*for the whole container  */
+.container{
+  padding: 20px;
+}
+
+/* view button  */
+.view{
+  margin-left: 30px;
+  margin-bottom: -30px;
+}
+
+.modal {
+    justify-content: center;
+    padding: 10px;
+    float: center;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    width: 80%; /* Full width */
+    height: 80%; /* Full height */
+    background-color: white; /* Fallback color */
+}
+
+ .modal img{
+  width: 100%;
+  height: 70%;
+
+}
+
+.modal .cancel{
+  background-color: white;
+  font-weight: bolder;
+  color: grey;
+  width: 10%;
+  float: left;
+  font-size: 25px;
+  align-items: flex-start;
+  border-style: none;
+}
+.modal h1{
+  width: 50%;
+}
