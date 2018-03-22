@@ -1,11 +1,24 @@
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body{
+  margin: 0;
   max-height: 80vwh;
-  max-width: 90%;
+  max-width: 100%;
+}
+
+/* nav design */
+nav{
+  background-color: black;
+  color: white;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  padding: 10px;
+  font-size: 25px;
 }
 
 /* adding effect to ul*/
@@ -55,39 +68,29 @@ display: block;
   padding: 20px;
 }
 
-/* view button  */
-.view{
-  margin-left: 30px;
-  margin-bottom: -30px;
-}
+
 
 .modal {
-    justify-content: center;
-    padding: 10px;
-    float: center;
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    width: 80%; /* Full width */
-    height: 80%; /* Full height */
-    background-color: white; /* Fallback color */
-}
-
- .modal img{
-  width: 100%;
-  height: 70%;
-
-}
+    background-color: black; /* Fallback color */
+    color: white;
+  }
 
 .modal .cancel{
   background-color: white;
   font-weight: bolder;
   color: grey;
-  width: 10%;
+  width: 4%;
   float: left;
-  font-size: 25px;
+  font-size: 15px;
   align-items: flex-start;
   border-style: none;
 }
 .modal h1{
   width: 50%;
+}
+
+.imageStore{
+
 }
