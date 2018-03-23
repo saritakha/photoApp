@@ -1,21 +1,18 @@
 "use strict";
 
-
-
-
 fetch('events.json')
 .then( res => res.json()) // returns promise
 .then( json => {   // get json
 
+  // putting select in nav
 const select = document.createElement('select');
 select.className= 'select';
 const navi = document.querySelector('nav');
 
  navi.appendChild(select);
+
  
 for (let item of json) {
-
-
 
   //sorting by category
   const selection = document.querySelector('.select');
@@ -36,7 +33,7 @@ for (let item of json) {
     const button = document.createElement('button');
 
     // class given to add event listener
-    button.className = 'modalButton';
+    button.className= 'modalButton';
     gallery.className = 'Gallery';
 
     // using value from json
@@ -55,22 +52,13 @@ for (let item of json) {
     gallery.appendChild(des);
     gallery.appendChild(button);
     li.appendChild(gallery);
-    // option.appendChild(item.category);
-    
-
-
+  
     // modal for the larger pic
     const modal = document.createElement('div');
     const x = document.createElement('button');
     const midI = document.createElement('img');
-    const map = document.createElement('iframe');
-
-    //map style
-    map.src = 'https://www.google.com/maps/embed/v1/;key=AIzaSyCJb1IqP_s-RMMavH9I9JiURw4vJkQ6lHc';
-    map.style.width = '100px';
-    map.style.height = '100px';
-
-
+    const map = document.createElement('script');
+    
     // giving class name 
     modal.className= 'modal';
     x.className = 'cancel';
@@ -84,30 +72,43 @@ for (let item of json) {
     // append child
     modal.appendChild(x);
     modal.appendChild(midI);
-    modal.appendChild(map);
-  
-   document.querySelector('ul').appendChild(li);
-   document.querySelector('ul').appendChild(modal);
+    document.querySelector('ul').appendChild(li);
+    document.querySelector('ul').appendChild(modal);
 
-}
-
-const modal = document.querySelector('.modal');
-const back = document.querySelector('li'); 
-const x = document.querySelector('.cancel');
-const modalButton = document.querySelector('.modalButton');
+// geting the modal on clicking
 const nav = document.querySelector('nav');
-
-modalButton.addEventListener('click' , () => 
-{
-  modal.style.display = 'block';
-  nav.style.display = 'none';
-  back.style.display = 'none';
-});
 
 x.addEventListener('click' , () => {
   modal.style.display = 'none';
   nav.style.display = 'block';
-  back.style.display = 'block';
+  li.style.display = 'block';
 });
 
+document.querySelectorAll('.modalButton').forEach((ele) => {
+  button.addEventListener('click', () => {
+    modal.style.display= 'block';
+    nav.style.display = 'none';
+    li.style.display = 'none';
+});
+})
+}
+
+// //map
+// const map = document.createElement('script');
+// map.src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDhIUxf2gQ6SH6QNBSjlUD5WK4b22dkVTI&callback=initMap'
+// const modal = document.querySelector('.modal');
+
+//     function initMap() {
+//       var uluru = {lat: item.category.lat, lng: item.category.lng};
+//       var mapI = new google.maps.Map(modal, {
+//         zoom: 4,
+//         center: uluru
+//       });
+//       var marker = new google.maps.Marker({
+//         position: uluru,
+//         mapI: mapI
+//       });
+//     }
+
+// modal.appendChild(map);
 });
