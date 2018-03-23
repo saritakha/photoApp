@@ -5,9 +5,7 @@
       "category": "Wife",
       "title": "Title 1",
       "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sodales enim eget leo condimentum vulputate. Sed lacinia consectetur fermentum. Vestibulum lobortis purus id nisi mattis posuere. Praesent sagittis justo quis nibh ullamcorper, eget elementum lorem consectetur. Pellentesque eu consequat justo, eu sodales eros.",
-      "coordinates": {
-        "lat": 60.2196781,
-        "lng": 24.8079786
+      "coordinates": {"lat": 60.2196781,"lng": 24.8079786
       },
       "thumbnail": "http://placekitten.com/320/300",
       "image": "http://placekitten.com/768/720",
@@ -34,6 +32,7 @@
       "thumbnail": "http://placekitten.com/319/300",
       "image": "http://placekitten.com/769/720",
       "original": "http://placekitten.com/2039/1920"
-    }]
+    }
+  ]
   
   
