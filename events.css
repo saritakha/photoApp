@@ -1,17 +1,18 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
+body {
   margin: 0;
-  max-height: 80vwh;
+  max-height: 100vwh;
   max-width: 100%;
 }
 
 /* nav design */
-nav{
+
+nav {
   background-color: black;
   color: white;
   width: 100%;
@@ -21,34 +22,52 @@ nav{
   font-size: 25px;
 }
 
-/* adding effect to ul*/
-ul{
-    display: grid;
-    grid-template-columns:  repeat(3,1fr);
-    justify-content: center;
-    list-style-type: none;
+nav:hover,
+nav:focus {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+
+/* displaying in grid */
+.grid-container {
+  display: grid;
+  align-items: center;
+}
+
+/* adding effect to container*/
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
 }
 
 /* adding effect to div */
-ul div{
+
+.container div {
+  background-color: wheat;
   padding: 10px;
   border: 0.5px solid grey;
   margin: 20px;
 }
 
-/* making image in center */
-img{
-width: 100%;
+.container div:hover,
+.container div:focus {
+  font-size: 30px;
+  cursor: pointer;
 }
 
 /*style for the title */
-h2 , h4{
-padding: 7px;
-text-align: center;
+
+h2,
+h4 {
+  padding: 7px;
+  text-align: center;
 }
 
 /* effect for all button  */
-button{
+button {
   border-radius: 7px;
   background-color: blue;
   color: white;
@@ -57,39 +76,92 @@ button{
   overflow: hidden;
 }
 
-/* effect button inside div */
-ul div button{
-margin: auto;
-display: block;
+button:hover,
+button:focus {
+  font-size: 25px;
+  cursor: pointer;
 }
 
-/*for the whole container  */
-.container{
-  padding: 20px;
+/* effect button inside div */
+.container div button {
+  margin: auto;
+  display: block;
 }
 
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    background-color: black; /* Fallback color */
-    color: white;
-  }
+  display: none;/* Hidden by default */
+  position: fixed;/* Stay in place */
+  z-index: 1;/* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;/* Full width */
+  height: 100%;/* Full height */
+  overflow: auto;/* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);/* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);/* Black w/ opacity */
+}
 
-.modal .cancel{
-  background-color: white;
-  font-weight: bolder;
-  color: grey;
-  width: 4%;
-  float: left;
+/* Modal Content/Box */
+.modal-content {
+  background-color: black;
+  margin: 7% auto;/* 7% from the top and centered */
+  border: 1px solid #888;
+  width: 70%;/* Could be more or less, depending on screen size */
+  height: 70%;
+}
+
+/* design for x */
+.modal .cancel {
+  padding-left: 7px;
+  padding-right: 7px;
+  color: #aaa;
+  float: right;
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.cancel:hover,
+.cancel:focus {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* flex-box */
+.flex-container {
+  display: flex;
+}
+
+/* image inside modal */
+#img-container {
+  display: flex;
+  flex: 40%;
+  flex-direction: column;
+  height: 100%;
+  width: 63%;
+  justify-content: flex-start;
+}
+
+/* map */
+#map-container {
+  display: flex;
+  flex-direction: column;
+  flex: 40%;
+  height: 100%;
+  width: 15%;
+}
+
+/* select by category */
+select {
+  width: 200px;
   font-size: 15px;
-  align-items: flex-start;
-  border-style: none;
-}
-.modal h1{
-  width: 50%;
+  margin: 7px;
 }
 
-select{
-float: right;
-width: 200px;
+/* sort by category */
+.sort {
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px;
 }

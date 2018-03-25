@@ -1,114 +1,100 @@
 "use strict";
 
+//////////////////////////////////////////////////////////////////////////////
+//fetching from json
 fetch('events.json')
-.then( res => res.json()) // returns promise
-.then( json => {   // get json
+  .then(res => res.json()) // returns json
+  .then(datas => {
+    this.createDomTree(datas);
+    this.createSelect(datas);
+  });
+// .catch( error => console.log('error: ' + error));
 
-  // putting select in nav
-const select = document.createElement('select');
-select.className= 'select';
-const navi = document.querySelector('nav');
 
- navi.appendChild(select);
-
- 
-for (let item of json) {
-
-  //sorting by category
-  const selection = document.querySelector('.select');
-  const option = document.createElement('option'); 
-  option.text = item.category;
-  selection.appendChild(option);
-  
-  //listing all the iems from the div and adding it in div
-    const li = document.createElement('li');
-
-    // all the things are inside a div
-    const gallery = document.createElement('div');
-    const Title = document.createElement('h2');
-    const img = document.createElement('img');
-    const des = document.createElement('h4');
-    const time = document.createElement('h4');
-    const category = document.createElement('h4');
-    const button = document.createElement('button');
-
-    // class given to add event listener
-    button.className= 'modalButton';
-    gallery.className = 'Gallery';
-
-    // using value from json
-    Title.innerHTML = item.title;
-    img.src = item.thumbnail;
-    des.innerHTML = item.details;
-    button.innerHTML = 'Full image';
-    time.innerHTML = item.time;
-    category.innerHTML = item.category;
-
-    // adding all the child to parent
-    gallery.appendChild(Title);
-    gallery.appendChild(img);
-    gallery.appendChild(time);
-    gallery.appendChild(category);
-    gallery.appendChild(des);
-    gallery.appendChild(button);
-    li.appendChild(gallery);
-  
-    // modal for the larger pic
-    const modal = document.createElement('div');
-    const x = document.createElement('button');
-    const midI = document.createElement('img');
-    const map = document.createElement('script');
-    
-    // giving class name 
-    modal.className= 'modal';
-    x.className = 'cancel';
-
-    // taking middle image and other
-    midI.src = item.image;
-    midI.style.width = '1000px';
-    midI.style.height = '650px';
-     x.innerHTML = 'x';
-      
-    // append child
-    modal.appendChild(x);
-    modal.appendChild(midI);
-    document.querySelector('ul').appendChild(li);
-    document.querySelector('ul').appendChild(modal);
-
-// geting the modal on clicking
-const nav = document.querySelector('nav');
-
-x.addEventListener('click' , () => {
-  modal.style.display = 'none';
-  nav.style.display = 'block';
-  li.style.display = 'block';
-});
-
-document.querySelectorAll('.modalButton').forEach((ele) => {
-  button.addEventListener('click', () => {
-    modal.style.display= 'block';
-    nav.style.display = 'none';
-    li.style.display = 'none';
-});
-})
+///////////////////////////////////////////////////////////////////////////////
+function createDomTree(jsons) {
+  for (let json of jsons) {
+    this.createDom(json);
+  }
 }
 
-// //map
-// const map = document.createElement('script');
-// map.src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDhIUxf2gQ6SH6QNBSjlUD5WK4b22dkVTI&callback=initMap'
-// const modal = document.querySelector('.modal');
+///////////////////////////////////////////////////////////////////////////////
+function createDom(item) {
+  // all the things are inside a div
+  const gallery = document.createElement('div');
+  const Title = document.createElement('h2');
+  const img = document.createElement('img');
+  const times = document.createElement('h4');
+  const categories = document.createElement('h4');
+  const fullImage = document.createElement('button');
 
-//     function initMap() {
-//       var uluru = {lat: item.category.lat, lng: item.category.lng};
-//       var mapI = new google.maps.Map(modal, {
-//         zoom: 4,
-//         center: uluru
-//       });
-//       var marker = new google.maps.Marker({
-//         position: uluru,
-//         mapI: mapI
-//       });
-//     }
+  Title.innerHTML = item.title;
+  img.src = item.thumbnail;
+  fullImage.innerHTML = 'Full image';
+  times.innerHTML = 'Time: '+item.time;
+  categories.innerHTML = 'Category: '+item.category;
 
-// modal.appendChild(map);
-});
+  //style to image
+  img.style.width = '100%';
+
+  // adding all the child to parent
+  gallery.appendChild(Title);
+  gallery.appendChild(img);
+  gallery.appendChild(times);
+  gallery.appendChild(categories);
+  gallery.appendChild(fullImage);
+
+  document.querySelector('.container').appendChild(gallery);
+  let mid_img = document.querySelector('#img-container');
+  let mapI = document.querySelector('#map-container');
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // add event listeners to the buttons
+  const modal = document.querySelector('.modal');
+
+  fullImage.addEventListener('click', (e) => {
+    modal.style.display = "block";
+    mid_img.src = item.image;
+    mapI.src = "https://www.google.com/maps/embed/v1/search?q=restaurantts&key=AIzaSyBcK406kFRqL3Kyv62HPQ6Ac0rmJAuoWVo"
+  })
+
+  const x = document.querySelector('.cancel');
+  x.addEventListener('click', () => {
+    modal.style.display = "none";
+  });
+
+}
+
+// Empty row div before inserting the filtered values
+function createEmptyDom(data) {
+  data.innerHTML = '';
+};
+
+///////////////////////////////////////////////////////////////////////
+function createSelect(jsons) {
+  //sorting by category
+  for (let item of jsons) {
+    const selection = document.querySelector('.select');
+    const option = document.createElement('option');
+    option.text = item.category;
+    selection.appendChild(option);
+
+    selection.addEventListener('change', () => {
+      const selected = selection.selectedIndex;
+      let selectedValue = selection[selected].value;
+      console.log(selectedValue);
+      const filteredData = jsons.filter((item) => {
+        if (selectedValue) {
+          return item.category === selectedValue;
+        } else {
+          return true;
+        }
+      });
+      const myContainer = document.querySelector('.container');
+      this.createEmptyDom(myContainer);
+      this.createDomTree(filteredData);
+
+    });
+  }
+}

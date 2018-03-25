@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Event App</title>
+  <link rel="stylesheet" href="events.css">
+</head>
+
+<body>
+  <nav>Cat Gallery
+  </nav>
+  <div class='grid-container'>
+    <span class='sort'>Sort By Categories</span>
+    <select class="select"></select>
+    <div class="container">
+      <!-- allitems go inside this -->
+    </div>
+    <div class="modal">
+      <div class="modal-content">
+        <span class="cancel">&times;</span>
+        <div class='flex-container'>
+          <img id='img-container' />
+          <iframe id='map-container'></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="events.js"></script>
+</body>
+
+</html>
