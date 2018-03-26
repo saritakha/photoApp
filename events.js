@@ -7,8 +7,8 @@ fetch('events.json')
   .then(datas => {
     this.createDomTree(datas);
     this.createSelect(datas);
-  });
-// .catch( error => console.log('error: ' + error));
+  })
+ .catch( error => console.log('error: ' + error));
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,8 +55,8 @@ function createDom(item) {
 
   fullImage.addEventListener('click', (e) => {
     modal.style.display = "block";
-    mid_img.src = item.image;
-    mapI.src = "https://www.google.com/maps/embed/v1/search?q=restaurantts&key=AIzaSyBcK406kFRqL3Kyv62HPQ6Ac0rmJAuoWVo"
+    mid_img.src = item.thumbnail;
+    mapI.innerHTML = '<iframe src="https://maps.google.com/maps?q=' + item.coordinates.lat + ',' + item.coordinates.lng + '&hl=en&z=14&amp;output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>';
   })
 
   const x = document.querySelector('.cancel');
