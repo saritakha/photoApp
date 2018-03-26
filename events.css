@@ -113,11 +113,12 @@ button:focus {
 .modal .cancel {
   padding-left: 7px;
   padding-right: 7px;
-  color: #aaa;
+  color:black;
   float: left;
   font-size: 38px;
   font-weight: bold;
-  z-index: 5;
+  z-index: 4;
+  position: absolute;
 }
 
 .cancel:hover,
@@ -140,7 +141,7 @@ button:focus {
   position: absolute;
   top:0;
   right: 0;
-  z-index: 5;;
+  z-index: 4;
 
 }
 

@@ -5,21 +5,21 @@
 fetch('events.json')
   .then(res => res.json()) // returns json
   .then(datas => {
-    this.createDomTree(datas);
-    this.createSelect(datas);
+    createDomTree(datas);
+    createSelect(datas);
   })
  .catch( error => console.log('error: ' + error));
 
 
 ///////////////////////////////////////////////////////////////////////////////
-function createDomTree(jsons) {
+const createDomTree = (jsons) => {
   for (let json of jsons) {
-    this.createDom(json);
+    createDom(json);
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-function createDom(item) {
+const createDom = (item) => {
   // all the things are inside a div
   const gallery = document.createElement('div');
   const Title = document.createElement('h2');
@@ -72,7 +72,7 @@ function createEmptyDom(data) {
 };
 
 ///////////////////////////////////////////////////////////////////////
-function createSelect(jsons) {
+const createSelect = (jsons) => {
   //sorting by category
   for (let item of jsons) {
     const selection = document.querySelector('.select');
@@ -92,8 +92,8 @@ function createSelect(jsons) {
         }
       });
       const myContainer = document.querySelector('.container');
-      this.createEmptyDom(myContainer);
-      this.createDomTree(filteredData);
+      createEmptyDom(myContainer);
+      createDomTree(filteredData);
 
     });
   }
