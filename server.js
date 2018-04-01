@@ -22,11 +22,12 @@ mongoose.connect('mongodb://localhost/photoApp').then((data) => {
     app.listen(3000, () => {
         console.log('server connected');
     });
-   
 }, err => {
     console.log('Connection to db failed: ' + err);
 });
 
+//connect to mongodb
+//////////////////////////////////////////////////////////////////
 const Schema = mongoose.Schema;
 const catSchema = new Schema({
     time: Date,
@@ -42,21 +43,24 @@ const catSchema = new Schema({
     original: String
 })
 
+
+//database model
+//////////////////////////////////////////////////////////////////
 const catModel = mongoose.model('catModel', catSchema);
 
 //upload for the photo
-
+//////////////////////////////////////////////////////////////////
 const upload = multer({
     dest: 'public/uploads'
 });
 
 app.post('/addform', upload.single('imageupload'), function (req, res, next) {
-    req.body.original = 'public/uploads/' + req.file.originalname;
-
+    req.body.original = '/uploads/' + req.file.filename;
     next();
 })
 
 // / EXIF 
+//////////////////////////////////////////////////////////////////
 const getCoordinates = (path_to_image) => {
     return new Promise((resolve, reject) => {
         new ExifImage({
@@ -88,31 +92,8 @@ getCoordinates('image.jpg').then(resp => {
     console.log(resp);
 });
 
-
-// sharp example *******************
-const sharp = require('sharp');
-
-
-const resize = (input, output, w, h) => {
-    return new Promise((resolve, reject) => {
-        sharp(input).
-        resize(w, h).
-        toFile(output, (err, info) => {
-            if (err)
-                reject(err);
-            if (info)
-                resolve(info);
-        });
-    });
-}
-
-// usage
-resize('image.jpg', 'thumb.jpg', 320, 200).then(resp => {
-    console.log(resp);
-});
-
-
 //post to form
+//////////////////////////////////////////////////////////////////
 app.post("/addform", (req, res) => {
 
     const myData = new catModel({
@@ -128,6 +109,7 @@ app.post("/addform", (req, res) => {
     myData.save();
 })
 
+//////////////////////////////////////////////////////////////////
 app.get('/api', (req, res) => {
     catModel.find({}, (err, data) => {
         res.json(data);
