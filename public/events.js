@@ -27,9 +27,8 @@ const createDom = (item) => {
   const times = document.createElement('h4');
   const categories = document.createElement('h4');
   const fullImage = document.createElement('button');
-
   Title.innerHTML = item.title;
-  img.src = item.thumbnail;
+  img.src = item.image;
   fullImage.innerHTML = 'Full image';
   times.innerHTML = 'Time: '+item.time;
   categories.innerHTML = 'Category: '+item.category;
@@ -55,8 +54,8 @@ const createDom = (item) => {
 
   fullImage.addEventListener('click', (e) => {
     modal.style.display = "block";
-    mid_img.src = item.thumbnail;
-    mapI.innerHTML = '<iframe src="https://maps.google.com/maps?q=' + item.coordinates.lat + ',' + item.coordinates.lng + '&hl=en&z=14&amp;output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>';
+    mid_img.src = item.image;
+    //mapI.innerHTML = '<iframe src="https://maps.google.com/maps?q=' + item.coordinates.lat + ',' + item.coordinates.lng + '&hl=en&z=14&amp;output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>';
   })
 
   const x = document.querySelector('.cancel');
