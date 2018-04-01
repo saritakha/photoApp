@@ -1,0 +1,34 @@
+<html>
+
+<head>
+    <title>Form to add</title>
+    <link rel="stylesheet" href="events.css">
+</head>
+
+<body>
+    <button class="viewBut">View</button>
+    <button class="addBut">Add</button>
+
+    <div class="grid-container">
+        <form method="POST" action="/addform" enctype="multipart/form-data">
+            <label>Title:</label>
+            </br>
+            <input type="St
+            ring" name="title">
+            </br>
+            <label>Category:</label>
+            <br>
+            <input type="String" name="category">
+            </br>
+            </br>
+            <input type="file" name="imageupload" />
+            </br>
+            </br>
+            <button type="submit" name="submit">Submit</button>
+
+        </form>
+    </div>
+    <script type="text/javascript" src="events.js"></script>
+</body>
+
+</html>

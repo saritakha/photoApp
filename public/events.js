@@ -2,7 +2,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //fetching from json
-fetch('events.json')
+fetch('/api')
   .then(res => res.json()) // returns json
   .then(datas => {
     createDomTree(datas);
@@ -98,3 +98,16 @@ const createSelect = (jsons) => {
     });
   }
 }
+
+//////////////////////////////////////////////////////////////////////////
+// listeners for the button
+const viewBut = document.querySelector('.viewBut');
+const addBut = document.querySelector('.addBut');
+
+viewBut.addEventListener('click', () =>{
+  window.open('index.html');
+});
+
+addBut.addEventListener('click', () =>{
+  window.open('form.html');
+});

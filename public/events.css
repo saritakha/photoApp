@@ -149,7 +149,21 @@ button:focus {
 select {
   width: 200px;
   font-size: 15px;
-  margin: 7px;
+  margin-bottom: 40px;
+}
+
+
+form{
+  border: 1px solid black;
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  font-size: 25px;
+}
+
+.submit{
+  background-color: antiquewhite;
+  font-size: 30px;
 }
 
 /* sort by category */
