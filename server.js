@@ -73,10 +73,9 @@ app.post("/addform", (req, res) => {
         image: req.body.original,
         coordinates: req.body.coordinates
        });
-       console.log(myData);
-    myData.save();
+        console.log(myData);
+        myData.save();
 })
-
 
 //////////////////////////////////////////////////////////////////
 app.get('/api', (req, res) => {
