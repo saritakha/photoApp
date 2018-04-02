@@ -10,7 +10,8 @@
     <button class="addBut">Add</button>
 
     <div class="grid-container">
-        <form method="POST" action="/addform" enctype="multipart/form-data">
+        <form method="POST" action="/addform" enctype="multipart/form-data"
+         onsubmit="setTimeout(function () { window.location.reload(); }, 10)">
             <label>Title:</label>
             </br>
             <input type="St

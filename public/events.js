@@ -104,9 +104,9 @@ const viewBut = document.querySelector('.viewBut');
 const addBut = document.querySelector('.addBut');
 
 viewBut.addEventListener('click', () =>{
-  window.open('index.html');
+  window.location.href = '/index.html';
 });
 
 addBut.addEventListener('click', () =>{
-  window.open('form.html');
+  window.location.href = '/form.html';
 });
