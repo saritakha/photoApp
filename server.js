@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ExifImage = require('exif').ExifImage;
 const multer = require('multer');
+const coordinates = require('./coordinates');
 
 //init app
 const app = express();
@@ -11,10 +12,6 @@ const app = express();
 //use index.html 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/modules', express.static('node_modules'));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
 
 //connect to mongodb
 //////////////////////////////////////////////////////////////////
@@ -26,7 +23,7 @@ mongoose.connect('mongodb://localhost/photoApp').then((data) => {
     console.log('Connection to db failed: ' + err);
 });
 
-//connect to mongodb
+//database schema
 //////////////////////////////////////////////////////////////////
 const Schema = mongoose.Schema;
 const catSchema = new Schema({
@@ -38,9 +35,7 @@ const catSchema = new Schema({
         lat: Number,
         lng: Number,
     },
-    thumbnail: String,
-    image: String,
-    original: String
+    image: String
 })
 
 
@@ -59,53 +54,27 @@ app.post('/addform', upload.single('imageupload'), function (req, res, next) {
     next();
 })
 
-// / EXIF 
-//////////////////////////////////////////////////////////////////
-const getCoordinates = (path_to_image) => {
-    return new Promise((resolve, reject) => {
-        new ExifImage({
-            image: path_to_image
-        }, (error, exifData) => {
-            if (error) {
-                reject('Error: ' + error.message);
-            } else {
-                resolve({
-                    lat: gpsToDecimal(exifData.gps.GPSLatitude,
-                        exifData.gps.GPSLatitudeRef),
-                    lng: gpsToDecimal(exifData.gps.GPSLongitude,
-                        exifData.gps.GPSLongitudeRef),
-                });
-            }
-        });
+// get coordinates from EXIF
+app.use('/addform', (req, res, next) => {
+    coordinates.getCoordinates(req.file.path).then(coords => {
+      req.body.coordinates = coords;
+      console.log(req.body.coordinates);
+      next();
     });
-}
-
-// convert GPS coordinates to GoogleMaps format
-const gpsToDecimal = (gpsData, hem) => {
-    let d = parseFloat(gpsData[0]) + parseFloat(gpsData[1] / 60) +
-        parseFloat(gpsData[2] / 3600);
-    return (hem === 'S' || hem === 'W') ? d *= -1 : d;
-};
-
-// usage
-getCoordinates('image.jpg').then(resp => {
-    console.log(resp);
-});
+  });
 
 //post to form
 //////////////////////////////////////////////////////////////////
 app.post("/addform", (req, res) => {
-
+    console.log(req.file.path);
     const myData = new catModel({
         time: Date.now(),
         title: req.body.title,
         category: req.body.category,
-        details: req.body.description,
-        coordinates: getCoordinates(req.file.path),
-        thumbnail: String,
+        details: req.body.details,
         image: req.body.original,
-        original: String
-    });
+       });
+       console.log(myData);
     myData.save();
 })
 
