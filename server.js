@@ -30,7 +30,6 @@ const catSchema = new Schema({
     time: Date,
     title: String,
     category: String,
-    details: String,
     coordinates: {
         lat: Number,
         lng: Number,
@@ -55,7 +54,7 @@ app.post('/addform', upload.single('imageupload'), function (req, res, next) {
 })
 
 // get coordinates from EXIF
-app.use('/addform', (req, res, next) => {
+app.post('/addform', (req, res, next) => {
     coordinates.getCoordinates(req.file.path).then(coords => {
       req.body.coordinates = coords;
       console.log(req.body.coordinates);
@@ -71,12 +70,13 @@ app.post("/addform", (req, res) => {
         time: Date.now(),
         title: req.body.title,
         category: req.body.category,
-        details: req.body.details,
         image: req.body.original,
+        coordinates: req.body.coordinates
        });
        console.log(myData);
     myData.save();
 })
+
 
 //////////////////////////////////////////////////////////////////
 app.get('/api', (req, res) => {

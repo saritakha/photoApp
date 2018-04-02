@@ -55,7 +55,7 @@ const createDom = (item) => {
   fullImage.addEventListener('click', (e) => {
     modal.style.display = "block";
     mid_img.src = item.image;
-    //mapI.innerHTML = '<iframe src="https://maps.google.com/maps?q=' + item.coordinates.lat + ',' + item.coordinates.lng + '&hl=en&z=14&amp;output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>';
+    mapI.innerHTML = '<iframe src="https://maps.google.com/maps?q=' + item.coordinates.lat + ',' + item.coordinates.lng + '&hl=en&z=14&amp;output=embed" frameborder="0" style="border:0" allowfullscreen></iframe>';
   })
 
   const x = document.querySelector('.cancel');
