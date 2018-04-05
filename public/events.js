@@ -8,7 +8,7 @@ fetch('/api')
     createDomTree(datas);
     createSelect(datas);
   })
- .catch( error => console.log('error: ' + error));
+  .catch(error => console.log('error: ' + error));
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,8 +30,8 @@ const createDom = (item) => {
   Title.innerHTML = item.title;
   img.src = item.image;
   fullImage.innerHTML = 'Full image';
-  times.innerHTML = 'Time: '+item.time;
-  categories.innerHTML = 'Category: '+item.category;
+  times.innerHTML = 'Time: ' + item.time;
+  categories.innerHTML = 'Category: ' + item.category;
 
   //style to image
   img.style.width = '100%';
@@ -103,10 +103,10 @@ const createSelect = (jsons) => {
 const viewBut = document.querySelector('.viewBut');
 const addBut = document.querySelector('.addBut');
 
-viewBut.addEventListener('click', () =>{
+viewBut.addEventListener('click', () => {
   window.location.href = '/index.html';
 });
 
-addBut.addEventListener('click', () =>{
+addBut.addEventListener('click', () => {
   window.location.href = '/form.html';
 });
