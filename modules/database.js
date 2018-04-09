@@ -9,6 +9,7 @@ class Database {
     //////////////////////////////////////////////////////////////////
     connectDB(url, app) {
         this.mongoose.connect(url).then((data) => {
+            console.log('database connected');
         },
          err => {
             console.log('Connection to db failed: ' + err);

@@ -22,16 +22,25 @@ const createDomTree = (jsons) => {
 const createDom = (item) => {
   // all the things are inside a div
   const gallery = document.createElement('div');
-  const Title = document.createElement('h2');
+  const Title = document.createElement('h3');
+  const cancel = document.createElement('button');
   const img = document.createElement('img');
-  const times = document.createElement('h4');
-  const categories = document.createElement('h4');
+  const times = document.createElement('h5');
+  const categories = document.createElement('h5');
   const fullImage = document.createElement('button');
+  const edit = document.createElement('button');
+
   Title.innerHTML = item.title;
   img.src = item.image;
   fullImage.innerHTML = 'Full image';
   times.innerHTML = 'Time: ' + item.time;
   categories.innerHTML = 'Category: ' + item.category;
+  cancel.innerHTML = 'Delete';
+  cancel.className = 'delete'; 
+  cancel.style.backgroundColor = "red";
+  edit.innerHTML = 'Edit';
+  edit.className = 'edit';
+  edit.style.backgroundColor = "green";
 
   //style to image
   img.style.width = '100%';
@@ -42,11 +51,12 @@ const createDom = (item) => {
   gallery.appendChild(times);
   gallery.appendChild(categories);
   gallery.appendChild(fullImage);
+  gallery.appendChild(edit);
+  gallery.appendChild(cancel);
 
-  document.querySelector('.container').appendChild(gallery);
+  document.querySelector('.home').appendChild(gallery);
   let mid_img = document.querySelector('#img-container');
   let mapI = document.querySelector('#map-container');
-
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   // add event listeners to the buttons
@@ -63,6 +73,26 @@ const createDom = (item) => {
     modal.style.display = "none";
   });
 
+//update
+//////////////////////////////////////////////////////////////////////////
+  edit.addEventListener('click',  () => {
+    window.location.href="update.html";
+    document.querySelector('#update_form').setAttribute("action",`/api/${item._id}`);
+  // Send PUT Request here
+  fetch(`/api/${item._id}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      category: categories,
+      title: Title,
+      image: img
+    })
+  }).then(res => {
+    if(res.ok) return res.json()
+  }).then(data => {
+    window.location.href = '/index.html';
+  })
+});
 }
 
 // Empty row div before inserting the filtered values
@@ -76,7 +106,7 @@ const createSelect = (jsons) => {
   for (let item of jsons) {
     const selection = document.querySelector('.select');
     const option = document.createElement('option');
-    option.text = item.category;
+    option.text = item.title;
     selection.appendChild(option);
 
     selection.addEventListener('change', () => {
@@ -85,12 +115,12 @@ const createSelect = (jsons) => {
       console.log(selectedValue);
       const filteredData = jsons.filter((item) => {
         if (selectedValue) {
-          return item.category === selectedValue;
+          return item.Title === selectedValue;
         } else {
           return true;
         }
       });
-      const myContainer = document.querySelector('.container');
+      const myContainer = document.querySelector('.home');
       createEmptyDom(myContainer);
       createDomTree(filteredData);
 
@@ -110,3 +140,6 @@ viewBut.addEventListener('click', () => {
 addBut.addEventListener('click', () => {
   window.location.href = '/form.html';
 });
+
+
+

@@ -9,6 +9,8 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const dbObject = require('mongodb').ObjectID;
+const moment = require('moment');
 
 //tls/ssl certificate/key for https
 const sslkey = fs.readFileSync('ssl-key.pem');
@@ -29,7 +31,9 @@ https.createServer(options, app).listen(3000);
 // //redirect server to https
 //////////////////////////////////////////////////////////////////
 http.createServer((req, res) => {
-    res.writeHead(301, { 'Location': 'https://localhost:3000' + req.url });
+    res.writeHead(301, {
+        'Location': 'https://localhost:3000' + req.url
+    });
     res.end();
 }).listen(8080);
 
@@ -47,13 +51,17 @@ http.createServer((req, res) => {
 //Passport 
 //////////////////////////////////////////////////////////////////
 require('dotenv').config();
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 //Username and Password in .env
 passport.use(new LocalStrategy(
     (username, password, done) => {
-        if (username !== process.env.username || password !== process.env.password) {
-            done(null, false, {message: 'Incorrect credentials.'});
+        if (username !== process.env.DB_USR || password !== process.env.DB_PWD) {
+            done(null, false, {
+                message: 'Incorrect credentials.'
+            });
             return;
         }
         return done(null, {});
@@ -62,14 +70,13 @@ passport.use(new LocalStrategy(
 app.use(passport.initialize());
 
 //login route
-app.post('/login', 
-  passport.authenticate('local', { 
-    successRedirect: '/', 
-    failureRedirect: '/login.html', 
-    session: false })
+app.post('/login',
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/login.html',
+        session: false
+    })
 );
-
-
 
 // //for Jelastic
 // app.enable('trust proxy');
@@ -91,15 +98,14 @@ app.post('/login',
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/modules', express.static('node_modules'));
 
-//connect mongodbs
-// mongodb://sarita:sarita@localhost:27017/photoApp?authSource=photoApp
+//connect mongodb
 //////////////////////////////////////////////////////////////////
-database.connectDB('mongodb://sarita:sarita@localhost/photoApp', app);
+database.connectDB(`mongodb://${process.env.DB_USR}:${process.env.DB_PWD}@${process.env.DB_HOST}/photoApp`, app);
 
 //database schema
 //////////////////////////////////////////////////////////////////
 const photoSchema = {
-    time: Date,
+    time: String,
     category: String,
     title: String,
     coordinates: {
@@ -118,14 +124,13 @@ const upload = multer({
     dest: 'public/uploads'
 });
 
-app.post('/addform', upload.single('imageupload'), function (req, res, next) {
+app.post('/api/photomodels', upload.single('imageupload'), function (req, res, next) {
     req.body.original = '/uploads/' + req.file.filename;
     next();
 })
 
-
 // get coordinates from EXIF
-app.post('/addform', (req, res, next) => {
+app.post('/api/photomodels', (req, res, next) => {
     coordinates.getCoordinates(req.file.path).then(coords => {
         req.body.coordinates = coords;
         console.log(req.body.coordinates);
@@ -135,10 +140,10 @@ app.post('/addform', (req, res, next) => {
 
 //post to form
 //////////////////////////////////////////////////////////////////
-app.post("/addform", (req, res) => {
+app.post("/api/photomodels", (req, res) => {
     console.log(req.file.path);
     const myData = new Model({
-        time: Date.now(),
+        time : moment(Date.now()).format('LLLL'),
         title: req.body.title,
         category: req.body.category,
         image: req.body.original,
@@ -149,6 +154,47 @@ app.post("/addform", (req, res) => {
     res.redirect('/');
 })
 
+//update
+app.put('/api/:id', function (req, res, next) {
+
+    let myId = dbObject(req.params._id);
+        const item = {
+        title : String ,
+        category: String,
+        image: String
+        }
+
+        item.title = req.body.title,
+        item.category = req.body.category,
+        item.image = req.body.image
+    
+        Model.findByIdAndUpdate({"_id": myId  },
+        {
+            '$set': item
+        }
+        ,(err, model) =>{
+    
+            (err) => {
+            console.log('error: ' +error);
+            }
+        })
+        next();
+        });
+    
+    //delete
+    app.get('/delete/:id', function (req, res) {
+        let id = req.params._id;
+        Model.remove({
+            _id: id
+        }, function (err) {
+            if (err) {
+                console.log(err)
+            } else {
+                res.send("Removed");
+            }
+        });
+    });
+    
 //create api
 //////////////////////////////////////////////////////////////////
 app.get('/api', (req, res) => {

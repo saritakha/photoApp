@@ -10,61 +10,25 @@ body {
   max-width: 100%;
 }
 
-/* nav design */
-
-nav {
-  background-color: black;
-  color: white;
-  width: 100%;
-  height: 10%;
-  text-align: center;
-  padding: 15px;
-  font-size: 25px;
+nav{
+  font-size: 20px;
+  color:white;
 }
 
-nav:hover,
-nav:focus {
-  font-size: 30px;
-  cursor: pointer;
-}
-
-
-/* displaying in grid */
-.grid-container {
-  display: grid;
-  align-items: center;
-}
-
-/* adding effect to container*/
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  justify-content: center;
+.navbar-brand{
+  font-size:30px;
 }
 
 /* adding effect to div */
-.container div {
-  background-color: wheat;
+.home div {
+  display: inline;
   padding: 10px;
   border: 0.5px solid grey;
-  margin: 20px;
+  margin: 10px;
+  overflow: hidden;
 }
 
-.container div:hover,
-.container div:focus {
-  font-size: 30px;
-  cursor: pointer;
-}
-
-/*style for the title */
-
-h2,
-h4 {
-  padding: 7px;
-  text-align: center;
-}
-
-/* effect for all button  */
+ /* //effect for all button  */
 button {
   border-radius: 7px;
   background-color: blue;
@@ -76,15 +40,28 @@ button {
 
 button:hover,
 button:focus {
-  font-size: 25px;
+  font-size: 18px;
   cursor: pointer;
 }
 
-/* effect button inside div */
-.container div button {
-  margin: auto;
-  display: block;
+.jumbotron{
+  margin: 20px;
 }
+
+ .home{
+  display:grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(3,1fr);
+  border:1px solid black;
+  margin: 10px;
+  max-width: 100%;
+  padding: 20px;
+} 
+/* effect button inside div */
+.home div button {
+  margin: auto;
+  display:block;
+} 
 
 .modal {
   display: none;/* Hidden by default */
@@ -135,7 +112,6 @@ button:focus {
   width:100%;
 }
 
-
 /* map */
 #map-container iframe {
   position: absolute;
@@ -152,12 +128,12 @@ select {
   margin-bottom: 40px;
 }
 
-
 form{
   border: 1px solid black;
   margin: auto;
-  width: 50%;
-  padding: 10px;
+  width: 80%;
+  padding: 30px;
+  margin: 30px;
   font-size: 25px;
 }
 
@@ -171,4 +147,9 @@ form{
   font-weight: bold;
   font-size: 20px;
   padding: 5px;
+  color :white;
+}
+
+.sorting{
+  float: right;
 }
