@@ -73,13 +73,18 @@ const createDom = (item) => {
     modal.style.display = "none";
   });
 
-//update
+  //update
 //////////////////////////////////////////////////////////////////////////
   edit.addEventListener('click',  () => {
     window.location.href="update.html";
-    document.querySelector('#update_form').setAttribute("action",`/api/${item._id}`);
+
+  //get value from form
+   sessionStorage.setItem('title',item.title);
+   sessionStorage.setItem('category',item.category);
+   sessionStorage.setItem('image',item.image);
+
   // Send PUT Request here
-  fetch(`/api/${item._id}`, {
+  fetch(`update/`+item._id, {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -89,8 +94,24 @@ const createDom = (item) => {
     })
   }).then(res => {
     if(res.ok) return res.json()
-  }).then(data => {
-    window.location.href = '/index.html';
+  })
+});
+
+//delete
+//////////////////////////////////////////////////////////////////////////
+  cancel.addEventListener('click',  () => {
+  
+  // Send PUT Request here
+  fetch(`delete/`+item._id, {
+    method: 'DELETE',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      category: categories,
+      title: Title,
+      image: img
+    })
+  }).then(res => {
+    if(res.ok) return res.json()
   })
 });
 }

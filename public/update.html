@@ -28,23 +28,29 @@
         <form id="updateform" method="PUT" enctype="multipart/form-data"  >
             <label>Title:</label>
             </br>
-            <input type="String" name="title" >
+            <input type="String" id="title"  value="">
             </br>
             <label>Category:</label>
             <br>
-            <input type="String" name="category">
+            <input type="String" id="category" value="">
             </br>
-            <input type="hidden" name="coordinates" >
+            <input type="hidden" id="coordinates" value="" >
             <br>
             </br>
-            <input type="file" name="imageupload" />
+            <input type="file" id="imageupload" value=""/>
             </br>
             </br>
-            <button type="submit" name="submit">Submit</button>
+            <button type="submit" name="edit">Edit</button>
 
         </form>
     
     <script type="text/javascript" src="events.js"></script>
+    <script >
+      //get the value of form
+        document.getElementById('title').value = sessionStorage.getItem('title');
+        document.getElementById('category').value = sessionStorage.getItem('category');
+        document.getElementById('imageupload').value = sessionStorage.getItem('image');
+      </script>
 </body>
 
 </html>

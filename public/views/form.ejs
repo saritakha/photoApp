@@ -1,0 +1,21 @@
+<% include header %>
+<body>
+    <form method="POST" action="/api/photomodels" enctype="multipart/form-data">
+        <label>Title:</label>
+        </br>
+        <input type="String" name="title">
+        </br>
+        <label>Category:</label>
+        <br>
+        <input type="String" name="category">
+        </br>
+        <input type="hidden" name="coordinates" >
+        <br>
+        </br>
+        <input type="file" name="imageupload" />
+        </br>
+        </br>
+        <button type="submit" name="submit">Submit</button>
+    </form>
+</body> 
+<% include footer %>

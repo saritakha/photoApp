@@ -11,6 +11,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const dbObject = require('mongodb').ObjectID;
 const moment = require('moment');
+const ejs = require('ejs');
 
 //tls/ssl certificate/key for https
 const sslkey = fs.readFileSync('ssl-key.pem');
@@ -38,7 +39,7 @@ http.createServer((req, res) => {
 }).listen(8080);
 
 //authentication
-//////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 // app.use((req, res, next) => {
 //     if (req.query.token === 'SECRET_TOKEN_TOKEN') {
 //         next();
@@ -95,6 +96,7 @@ app.post('/login',
 // });
 
 //use index.html 
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/modules', express.static('node_modules'));
 
@@ -155,7 +157,7 @@ app.post("/api/photomodels", (req, res) => {
 })
 
 //update
-app.put('/api/:id', function (req, res, next) {
+app.put('update/:id', function (req, res, next) {
 
     let myId = dbObject(req.params._id);
         const item = {
@@ -182,7 +184,7 @@ app.put('/api/:id', function (req, res, next) {
         });
     
     //delete
-    app.get('/delete/:id', function (req, res) {
+    app.delete('delete/:id', function (req, res) {
         let id = req.params._id;
         Model.remove({
             _id: id
