@@ -7,9 +7,8 @@ fetch('/api')
   .then(datas => {
     createDomTree(datas);
     createSelect(datas);
-  })
-  .catch(error => console.log('error: ' + error));
-
+  });
+  // .catch(error => console.log('error: ' + error));
 
 ///////////////////////////////////////////////////////////////////////////////
 const createDomTree = (jsons) => {
@@ -36,10 +35,8 @@ const createDom = (item) => {
   times.innerHTML = 'Time: ' + item.time;
   categories.innerHTML = 'Category: ' + item.category;
   cancel.innerHTML = 'Delete';
-  cancel.className = 'delete'; 
   cancel.style.backgroundColor = "red";
   edit.innerHTML = 'Edit';
-  edit.className = 'edit';
   edit.style.backgroundColor = "green";
 
   //style to image
@@ -54,11 +51,11 @@ const createDom = (item) => {
   gallery.appendChild(edit);
   gallery.appendChild(cancel);
 
-  document.querySelector('.home').appendChild(gallery);
+  document.querySelector('#home').appendChild(gallery);
   let mid_img = document.querySelector('#img-container');
   let mapI = document.querySelector('#map-container');
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
   // add event listeners to the buttons
   const modal = document.querySelector('.modal');
 
@@ -76,16 +73,17 @@ const createDom = (item) => {
   //update
 //////////////////////////////////////////////////////////////////////////
   edit.addEventListener('click',  () => {
-    window.location.href="update.html";
+     window.location.href="/update";
 
   //get value from form
+  sessionStorage.setItem('id',item._id);
    sessionStorage.setItem('title',item.title);
    sessionStorage.setItem('category',item.category);
    sessionStorage.setItem('image',item.image);
 
   // Send PUT Request here
-  fetch(`update/`+item._id, {
-    method: 'PUT',
+  fetch(`/update/`+item_id, {
+    method: 'put',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       category: categories,
@@ -100,30 +98,18 @@ const createDom = (item) => {
 //delete
 //////////////////////////////////////////////////////////////////////////
   cancel.addEventListener('click',  () => {
-  
-  // Send PUT Request here
-  fetch(`delete/`+item._id, {
-    method: 'DELETE',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      category: categories,
-      title: Title,
-      image: img
-    })
-  }).then(res => {
-    if(res.ok) return res.json()
-  })
+  window.location.href = "/delete:"+item._id;
 });
 }
 
 // Empty row div before inserting the filtered values
-function createEmptyDom(data) {
+const createEmptyDom = (data) => {
   data.innerHTML = '';
 };
 
 ///////////////////////////////////////////////////////////////////////
 const createSelect = (jsons) => {
-  //sorting by category
+  //sorting by titile
   for (let item of jsons) {
     const selection = document.querySelector('.select');
     const option = document.createElement('option');
@@ -141,7 +127,7 @@ const createSelect = (jsons) => {
           return true;
         }
       });
-      const myContainer = document.querySelector('.home');
+      const myContainer = document.querySelector('#home');
       createEmptyDom(myContainer);
       createDomTree(filteredData);
 
@@ -149,18 +135,6 @@ const createSelect = (jsons) => {
   }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// listeners for the button
-const viewBut = document.querySelector('.viewBut');
-const addBut = document.querySelector('.addBut');
-
-viewBut.addEventListener('click', () => {
-  window.location.href = '/index.html';
-});
-
-addBut.addEventListener('click', () => {
-  window.location.href = '/form.html';
-});
 
 
 

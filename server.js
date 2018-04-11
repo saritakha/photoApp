@@ -12,6 +12,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const dbObject = require('mongodb').ObjectID;
 const moment = require('moment');
 const ejs = require('ejs');
+const cookiesParser = require('cookies-parser');
 
 //tls/ssl certificate/key for https
 const sslkey = fs.readFileSync('ssl-key.pem');
@@ -95,11 +96,6 @@ app.post('/login',
 //   }
 // });
 
-//use index.html 
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/modules', express.static('node_modules'));
-
 //connect mongodb
 //////////////////////////////////////////////////////////////////
 database.connectDB(`mongodb://${process.env.DB_USR}:${process.env.DB_PWD}@${process.env.DB_HOST}/photoApp`, app);
@@ -116,9 +112,26 @@ const photoSchema = {
     },
     image: String
 };
-
 // databasemodel
 const Model = database.getSchema(photoSchema, 'photoModel');
+
+//set view engine
+//////////////////////////////////////////////////////////////////
+app.set('view engine', 'ejs');
+
+app.use(express.static(path.join(__dirname, '/public')));
+
+app.get('/',(req,res) => {
+    res.render('index');
+});
+
+app.get('/form',(req,res) => {
+    res.render('form');
+})
+
+app.get('/update',(req,res) => {
+    res.render('updates');
+})
 
 //upload for the photo
 //////////////////////////////////////////////////////////////////
@@ -126,13 +139,13 @@ const upload = multer({
     dest: 'public/uploads'
 });
 
-app.post('/api/photomodels', upload.single('imageupload'), function (req, res, next) {
+app.post('/posting', upload.single('imageupload'), function (req, res, next) {
     req.body.original = '/uploads/' + req.file.filename;
     next();
 })
 
 // get coordinates from EXIF
-app.post('/api/photomodels', (req, res, next) => {
+app.post('/posting', (req, res, next) => {
     coordinates.getCoordinates(req.file.path).then(coords => {
         req.body.coordinates = coords;
         console.log(req.body.coordinates);
@@ -142,10 +155,10 @@ app.post('/api/photomodels', (req, res, next) => {
 
 //post to form
 //////////////////////////////////////////////////////////////////
-app.post("/api/photomodels", (req, res) => {
+app.post("/posting", (req, res) => {
     console.log(req.file.path);
     const myData = new Model({
-        time : moment(Date.now()).format('LLLL'),
+        time: moment(Date.now()).format('LLLL'),
         title: req.body.title,
         category: req.body.category,
         image: req.body.original,
@@ -157,46 +170,36 @@ app.post("/api/photomodels", (req, res) => {
 })
 
 //update
-app.put('update/:id', function (req, res, next) {
+app.put('/update/:id', (req, res, next) => {
 
-    let myId = dbObject(req.params._id);
-        const item = {
-        title : String ,
-        category: String,
-        image: String
-        }
+    let id= req.params.id;
+  Model.findOne({"_id":id}, function(err,newItem){
+      if(err){
+          console.log(err);
+          res.status(500).send();
+      }
+      else{
+          newItem.title = req.body.title;
+          newItem.category = req.body.category;
+      }
+      newItem.save();
+      })
+});
 
-        item.title = req.body.title,
-        item.category = req.body.category,
-        item.image = req.body.image
-    
-        Model.findByIdAndUpdate({"_id": myId  },
-        {
-            '$set': item
-        }
-        ,(err, model) =>{
-    
-            (err) => {
-            console.log('error: ' +error);
-            }
-        })
-        next();
-        });
-    
-    //delete
-    app.delete('delete/:id', function (req, res) {
-        let id = req.params._id;
-        Model.remove({
+//delete
+app.get('/delete:', function (req, res , err) {
+    let id = req.params.id;
+    Model.deleteOne({
             _id: id
-        }, function (err) {
-            if (err) {
-                console.log(err)
-            } else {
-                res.send("Removed");
-            }
         });
-    });
-    
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect('/');
+            }
+        
+});
+
 //create api
 //////////////////////////////////////////////////////////////////
 app.get('/api', (req, res) => {

@@ -20,7 +20,7 @@ nav{
 }
 
 /* adding effect to div */
-.home div {
+#home div {
   display: inline;
   padding: 10px;
   border: 0.5px solid grey;
@@ -48,7 +48,7 @@ button:focus {
   margin: 20px;
 }
 
- .home{
+ #home{
   display:grid;
   grid-gap: 10px;
   grid-template-columns: repeat(3,1fr);
@@ -58,7 +58,7 @@ button:focus {
   padding: 20px;
 } 
 /* effect button inside div */
-.home div button {
+#home div button {
   margin: auto;
   display:block;
 } 
@@ -152,4 +152,8 @@ form{
 
 .sorting{
   float: right;
+}
+
+footer{
+  text-align: center;
 }

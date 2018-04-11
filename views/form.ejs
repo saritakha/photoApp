@@ -1,9 +1,13 @@
-<% include header %>
+<!DOCTYPE html>
+<html>
+<% include ./template/header.ejs %>
 <body>
-    <form method="POST" action="/api/photomodels" enctype="multipart/form-data">
+        <% include ./template/nav.ejs %>
+    <form method="POST" action="/posting" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="">
         <label>Title:</label>
         </br>
-        <input type="String" name="title">
+        <input type="String" name="title" value="" >
         </br>
         <label>Category:</label>
         <br>
@@ -16,6 +20,7 @@
         </br>
         </br>
         <button type="submit" name="submit">Submit</button>
+
     </form>
 </body> 
-<% include footer %>
+</html>
