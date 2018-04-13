@@ -8,7 +8,9 @@ fetch('/api')
     createDomTree(datas);
     createSelect(datas);
   });
-  // .catch(error => console.log('error: ' + error));
+// .catch(error => console.log('error: ' + error));
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 const createDomTree = (jsons) => {
@@ -32,12 +34,57 @@ const createDom = (item) => {
   Title.innerHTML = item.title;
   img.src = item.image;
   fullImage.innerHTML = 'Full image';
+  fullImage.style.backgroundColor= "#578bc6";
+  fullImage.style.width = '100%';
   times.innerHTML = 'Time: ' + item.time;
   categories.innerHTML = 'Category: ' + item.category;
+
+  // delete function for deleting 
+  const tryDel = (e) => {
+    e.preventDefault();
+    console.log(cancel.dataset.id)
+    fetch(cancel.dataset.id, {
+      method: 'DELETE'
+    })
+  }
+
+  //deletebutton and s stying
   cancel.innerHTML = 'Delete';
-  cancel.style.backgroundColor = "red";
+  cancel.addEventListener('click', tryDel);
+  cancel.setAttribute('data-id', item._id);
+  cancel.style.backgroundColor = "#e0596b";
+  cancel.style.width = '100%';
+
+  //edit
   edit.innerHTML = 'Edit';
-  edit.style.backgroundColor = "green";
+  edit.href = "/edit/"+item._id;
+  edit.style.backgroundColor = "#6dbc7a";
+  edit.style.width = '100%';
+
+  edit.addEventListener('click', () => {
+    window.location.href = "/update";
+
+    //get value from form
+    sessionStorage.setItem('id', item._id);
+    sessionStorage.setItem('title', item.title);
+    sessionStorage.setItem('category', item.category);
+    sessionStorage.setItem('image', item.image);
+
+    let data = {
+    title: item.title,
+    category: item.category,
+    }
+
+    fetch('/edit/'+item._id, {
+      method: 'PUT', 
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+    .then(res => res.json())
+    .then(err => console.log(err))
+  });
 
   //style to image
   img.style.width = '100%';
@@ -69,37 +116,6 @@ const createDom = (item) => {
   x.addEventListener('click', () => {
     modal.style.display = "none";
   });
-
-  //update
-//////////////////////////////////////////////////////////////////////////
-  edit.addEventListener('click',  () => {
-     window.location.href="/update";
-
-  //get value from form
-  sessionStorage.setItem('id',item._id);
-   sessionStorage.setItem('title',item.title);
-   sessionStorage.setItem('category',item.category);
-   sessionStorage.setItem('image',item.image);
-
-  // Send PUT Request here
-  fetch(`/update/`+item_id, {
-    method: 'put',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      category: categories,
-      title: Title,
-      image: img
-    })
-  }).then(res => {
-    if(res.ok) return res.json()
-  })
-});
-
-//delete
-//////////////////////////////////////////////////////////////////////////
-  cancel.addEventListener('click',  () => {
-  window.location.href = "/delete:"+item._id;
-});
 }
 
 // Empty row div before inserting the filtered values
@@ -119,10 +135,9 @@ const createSelect = (jsons) => {
     selection.addEventListener('change', () => {
       const selected = selection.selectedIndex;
       let selectedValue = selection[selected].value;
-      console.log(selectedValue);
       const filteredData = jsons.filter((item) => {
         if (selectedValue) {
-          return item.Title === selectedValue;
+          return item.title === selectedValue;
         } else {
           return true;
         }
@@ -130,11 +145,6 @@ const createSelect = (jsons) => {
       const myContainer = document.querySelector('#home');
       createEmptyDom(myContainer);
       createDomTree(filteredData);
-
     });
   }
 }
-
-
-
-

@@ -11,18 +11,18 @@ body {
 }
 
 nav{
-  font-size: 20px;
+  font-size: 25px;
   color:white;
 }
 
 .navbar-brand{
-  font-size:30px;
+  font-size: 35px;
 }
 
 /* adding effect to div */
 #home div {
   display: inline;
-  padding: 10px;
+  padding: 20px;
   border: 0.5px solid grey;
   margin: 10px;
   overflow: hidden;
@@ -49,12 +49,13 @@ button:focus {
 }
 
  #home{
+  text-align: center;
   display:grid;
   grid-gap: 10px;
   grid-template-columns: repeat(3,1fr);
   border:1px solid black;
-  margin: 10px;
-  max-width: 100%;
+  margin: 1.5%;
+  max-width: 97%;
   padding: 20px;
 } 
 /* effect button inside div */
@@ -122,10 +123,10 @@ button:focus {
 }
 
 /* select by category */
-select {
-  width: 200px;
-  font-size: 15px;
-  margin-bottom: 40px;
+.select {
+  width: 300px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 form{
@@ -143,17 +144,24 @@ form{
 }
 
 /* sort by category */
-.sort {
+#sort {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 25px;
   padding: 5px;
-  color :white;
 }
 
-.sorting{
-  float: right;
+#sorting{
+ margin: 20px;
 }
 
-footer{
+.footer{
   text-align: center;
+  margin: 10px;
+}
+
+/* media query to make thumbnails responsive */
+@media only screen and (max-width: 700px) {
+  #home{
+    grid-template-columns: repeat(1,1fr);
+  }
 }

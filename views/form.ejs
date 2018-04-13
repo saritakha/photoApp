@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html>
 <% include ./template/header.ejs %>
-<body>
-        <% include ./template/nav.ejs %>
-    <form method="POST" action="/posting" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="">
-        <label>Title:</label>
-        </br>
-        <input type="String" name="title" value="" >
-        </br>
-        <label>Category:</label>
-        <br>
-        <input type="String" name="category">
-        </br>
-        <input type="hidden" name="coordinates" >
-        <br>
-        </br>
-        <input type="file" name="imageupload" />
-        </br>
-        </br>
-        <button type="submit" name="submit">Submit</button>
 
-    </form>
-</body> 
+    <body>
+        <% include ./template/nav.ejs %>
+            <form method="POST" action="/add" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="">
+                <label>Title:</label>
+                </br>
+                <input type="String" name="title" value="">
+                </br>
+                <label>Category:</label>
+                <br>
+                <input type="String" name="category">
+                </br>
+                <input type="hidden" name="coordinates">
+                <br>
+                </br>
+                <input type="file" name="imageupload" />
+                </br>
+                </br>
+                <button type="submit" name="submit">Submit</button>
+
+            </form>
+            <script src="events.js">
+            </script>
+    </body>
+
 </html>

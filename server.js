@@ -13,6 +13,31 @@ const dbObject = require('mongodb').ObjectID;
 const moment = require('moment');
 const ejs = require('ejs');
 const cookiesParser = require('cookies-parser');
+const helmet = require('helmet');
+const cors = require('cors');
+const users= require('./routes/users');
+
+//init app
+const app = express();
+
+//set view engine
+//////////////////////////////////////////////////////////////////
+app.set('view engine', 'ejs');
+
+//middleware
+app.use(helmet());
+app.use(helmet({
+    ieNoOpen : false
+  }));
+// app.use(cors());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(passport.initialize());
+app.use(express.static('public'));
+//Parse aplication/json
+app.use(bodyParser.json());
+app.use('/users',users);
 
 //tls/ssl certificate/key for https
 const sslkey = fs.readFileSync('ssl-key.pem');
@@ -22,9 +47,6 @@ const options = {
     key: sslkey,
     cert: sslcert
 };
-
-//init app
-const app = express();
 
 //listen port 3000
 //////////////////////////////////////////////////////////////////
@@ -53,10 +75,6 @@ http.createServer((req, res) => {
 //Passport 
 //////////////////////////////////////////////////////////////////
 require('dotenv').config();
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
 //Username and Password in .env
 passport.use(new LocalStrategy(
     (username, password, done) => {
@@ -69,13 +87,12 @@ passport.use(new LocalStrategy(
         return done(null, {});
     }
 ));
-app.use(passport.initialize());
 
 //login route
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/',
-        failureRedirect: '/login.html',
+        failureRedirect: '/login',
         session: false
     })
 );
@@ -115,23 +132,27 @@ const photoSchema = {
 // databasemodel
 const Model = database.getSchema(photoSchema, 'photoModel');
 
-//set view engine
-//////////////////////////////////////////////////////////////////
-app.set('view engine', 'ejs');
-
-app.use(express.static(path.join(__dirname, '/public')));
-
-app.get('/',(req,res) => {
+//set route for accesing data
+app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.get('/form',(req,res) => {
+app.get('/form', (req, res) => {
     res.render('form');
 })
 
-app.get('/update',(req,res) => {
+app.get('/update', (req, res) => {
     res.render('updates');
 })
+
+// app.get('/login', (req, res) => {
+//     res.render('login');
+// })
+
+// app.get('/register', (req, res) => {
+//     res.render('register');
+// })
+
 
 //upload for the photo
 //////////////////////////////////////////////////////////////////
@@ -139,13 +160,13 @@ const upload = multer({
     dest: 'public/uploads'
 });
 
-app.post('/posting', upload.single('imageupload'), function (req, res, next) {
+app.post('/add',cors(), upload.single('imageupload'), function (req, res, next) {
     req.body.original = '/uploads/' + req.file.filename;
     next();
 })
 
 // get coordinates from EXIF
-app.post('/posting', (req, res, next) => {
+app.post('/add', cors(), (req, res, next) => {
     coordinates.getCoordinates(req.file.path).then(coords => {
         req.body.coordinates = coords;
         console.log(req.body.coordinates);
@@ -155,7 +176,7 @@ app.post('/posting', (req, res, next) => {
 
 //post to form
 //////////////////////////////////////////////////////////////////
-app.post("/posting", (req, res) => {
+app.post("/add", cors(),  (req, res) => {
     console.log(req.file.path);
     const myData = new Model({
         time: moment(Date.now()).format('LLLL'),
@@ -170,34 +191,28 @@ app.post("/posting", (req, res) => {
 })
 
 //update
-app.put('/update/:id', (req, res, next) => {
-
-    let id= req.params.id;
-  Model.findOne({"_id":id}, function(err,newItem){
-      if(err){
-          console.log(err);
-          res.status(500).send();
-      }
-      else{
-          newItem.title = req.body.title;
-          newItem.category = req.body.category;
-      }
-      newItem.save();
-      })
+app.put('/edit/:id', (req, res, next) => {
+    console.log(req.params.id);
+    let id = req.params.id;
+    let myData = {};
+    myData.title = req.body.title;
+    myData.category = req.body.category;
+    Model.update( {"id": id}, myData, (err) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+        } 
+    })
+ res.redirect('/');
 });
 
 //delete
-app.get('/delete:', function (req, res , err) {
+app.delete('/:id', function (req, res) {
     let id = req.params.id;
-    Model.deleteOne({
-            _id: id
-        });
-            if (err) {
-                console.log(err);
-            } else {
-                res.redirect('/');
-            }
-        
+    Model.findByIdAndRemove(id, (err) =>{
+        console.log(err);
+    })
+    res.redirect('/');
 });
 
 //create api

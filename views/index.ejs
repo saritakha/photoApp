@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html>
- <% include ./template/header.ejs %>
-  <body>
-   <% include ./template/nav.ejs %>
-   <div class="container-fluid">
-    <div class="jumbotron">
-      <div class="image-container"><img class="img-responsive" src="gallery.jpg" alt="Gallery"  width="40%">
-      </div><h2>Enjoy Posting Photos!!</h2>
-    </div>
-  </div>
-  <div class="container-fluid ">
-  <div class="  col-sm-3 col.md-6 " id="home">
-      </div>
-  </div>
+<% include ./template/header.ejs %>
 
-  <!-- modal for the full image -->
-  <div class="modal">
-    <div class="modal-content">
-      <span class="cancel">&times;</span>
-      <img id='img-container' />
-      <div id='map-container'></div>
-    </div>
-  </div>
-  </div>
-   <% include template/footer.ejs %>
-   <script src="events.js"></script>
+  <body>
+    <% include ./template/nav.ejs %>
+      <div class="container-fluid">
+        <div class="jumbotron">
+          <div class="image-container">
+            <img class="img-responsive" src="gallery.jpg" alt="Gallery" width="40%">
+          </div>
+          <h2>Enjoy Posting Photos!!</h2>
+        </div>
+        <div id="sorting">
+          <span id='sort'>Search</span>
+          <select class="select"></select>
+        </div>
+      </div>
+      <div class="container-fluid ">
+        <div class="col-sm-3 col.md-6 " id="home">
+        </div>
+      </div>
+
+      <!-- modal for the full image -->
+      <div class="modal">
+        <div class="modal-content">
+          <span class="cancel">&times;</span>
+          <img id='img-container' />
+          <div id='map-container'></div>
+        </div>
+      </div>
+      </div>
+      <% include template/footer.ejs %>
+        <script src="events.js"></script>
   </body>
-  </html>
+
+</html>
