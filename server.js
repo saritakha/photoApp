@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
@@ -15,7 +17,7 @@ const ejs = require('ejs');
 const cookiesParser = require('cookies-parser');
 const helmet = require('helmet');
 const cors = require('cors');
-const users= require('./routes/users');
+const users = require('./routes/users');
 
 //init app
 const app = express();
@@ -26,9 +28,7 @@ app.set('view engine', 'ejs');
 
 //middleware
 app.use(helmet());
-app.use(helmet({
-    ieNoOpen : false
-  }));
+
 // app.use(cors());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -37,7 +37,7 @@ app.use(passport.initialize());
 app.use(express.static('public'));
 //Parse aplication/json
 app.use(bodyParser.json());
-app.use('/users',users);
+app.use('/users', users);
 
 //tls/ssl certificate/key for https
 const sslkey = fs.readFileSync('ssl-key.pem');
@@ -141,18 +141,9 @@ app.get('/form', (req, res) => {
     res.render('form');
 })
 
-app.get('/update', (req, res) => {
-    res.render('updates');
-})
-
-// app.get('/login', (req, res) => {
-//     res.render('login');
-// })
-
-// app.get('/register', (req, res) => {
-//     res.render('register');
-// })
-
+app.get('/update/:id', (req, res) => {
+     res.render('updates');  
+});
 
 //upload for the photo
 //////////////////////////////////////////////////////////////////
@@ -160,7 +151,7 @@ const upload = multer({
     dest: 'public/uploads'
 });
 
-app.post('/add',cors(), upload.single('imageupload'), function (req, res, next) {
+app.post('/add', cors(), upload.single('imageupload'), function (req, res, next) {
     req.body.original = '/uploads/' + req.file.filename;
     next();
 })
@@ -176,7 +167,7 @@ app.post('/add', cors(), (req, res, next) => {
 
 //post to form
 //////////////////////////////////////////////////////////////////
-app.post("/add", cors(),  (req, res) => {
+app.post("/add", cors(), (req, res) => {
     console.log(req.file.path);
     const myData = new Model({
         time: moment(Date.now()).format('LLLL'),
@@ -190,28 +181,70 @@ app.post("/add", cors(),  (req, res) => {
     res.redirect('/');
 })
 
-//update
-app.put('/edit/:id', (req, res, next) => {
-    console.log(req.params.id);
-    let id = req.params.id;
-    let myData = {};
-    myData.title = req.body.title;
-    myData.category = req.body.category;
-    Model.update( {"id": id}, myData, (err) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send();
-        } 
-    })
- res.redirect('/');
+// Post request from the form 
+app.post('/edit', upload.single('imageupload'), (req, res, next) => {
+req.body.original = '/uploads/' + req.file.filename;
+
+coordinates.getCoordinates(req.file.path).then(coords => {
+    req.body.coordinates = coords;
+    console.log(req.body.coordinates);
+    next();
 });
+        Model.findOneAndUpdate({
+                _id: req.body.id
+            }, {
+                $set: {
+                    image:req.body.original,
+                    title: req.body.title,
+                    category: req.body.category,
+                    time: moment(Date.now()).format('LLLL')
+                }
+            },
+            (err, photo) => {
+                if(err) console.log(err);
+                photo.save();
+                res.redirect('/');
+            }
+        )   
+})
+
+
+// app.post('/edit', cors(), upload.single('imageupload'), function (req, res, next) {
+//     req.body.original = '/uploads/' + req.file.filename;
+//     next();
+// })
+
+// // get coordinates from EXIF
+// app.post('/edit', cors(), (req, res, next) => {
+//     coordinates.getCoordinates(req.file.path).then(coords => {
+//         req.body.coordinates = coords;
+//         console.log(req.body.coordinates);
+//         next();
+//     });
+// });
+
+// //post to form
+// //////////////////////////////////////////////////////////////////
+// app.post("/edit", cors(), (req, res) => {
+//     console.log(req.body.id);
+//     Model.findOneAndUpdate({
+//                         _id: req.body.id
+//                     }, {
+//                         $set: {
+//                             title: req.body.title,
+//                             category: req.body.category,
+//                             time: req.body.time
+//                         }
+//                     });
+//     res.redirect('/');
+// })
 
 //delete
 app.delete('/:id', function (req, res) {
     let id = req.params.id;
-    Model.findByIdAndRemove(id, (err) =>{
-        console.log(err);
-    })
+    Model.remove({_id: id}, (err) => {
+      if(err)  console.log(err);
+    });
     res.redirect('/');
 });
 

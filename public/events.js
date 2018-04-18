@@ -1,24 +1,5 @@
 "use strict";
 
-//////////////////////////////////////////////////////////////////////////////
-//fetching from json
-fetch('/api')
-  .then(res => res.json()) // returns json
-  .then(datas => {
-    createDomTree(datas);
-    createSelect(datas);
-  });
-// .catch(error => console.log('error: ' + error));
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-const createDomTree = (jsons) => {
-  for (let json of jsons) {
-    createDom(json);
-  }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 const createDom = (item) => {
   // all the things are inside a div
@@ -45,6 +26,8 @@ const createDom = (item) => {
     console.log(cancel.dataset.id)
     fetch(cancel.dataset.id, {
       method: 'DELETE'
+    }).then(() => {
+      window.location.href= '/';
     })
   }
 
@@ -62,30 +45,15 @@ const createDom = (item) => {
   edit.style.width = '100%';
 
   edit.addEventListener('click', () => {
-    window.location.href = "/update";
+    window.location.href = "/update/"+item._id;
 
     //get value from form
     sessionStorage.setItem('id', item._id);
     sessionStorage.setItem('title', item.title);
     sessionStorage.setItem('category', item.category);
     sessionStorage.setItem('image', item.image);
-
-    let data = {
-    title: item.title,
-    category: item.category,
-    }
-
-    fetch('/edit/'+item._id, {
-      method: 'PUT', 
-      body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    })
-    .then(res => res.json())
-    .then(err => console.log(err))
   });
-
+  
   //style to image
   img.style.width = '100%';
 
@@ -148,3 +116,21 @@ const createSelect = (jsons) => {
     });
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+const createDomTree = (jsons) => {
+  for (let json of jsons) {
+    createDom(json);
+  }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//fetching from json
+fetch('/api')
+  .then(res => res.json()) // returns json
+  .then(datas => {
+    createDomTree(datas);
+    createSelect(datas);
+  });
+

@@ -7,6 +7,7 @@ var expressValidator = require('express-validator');
 router.use(expressValidator())
 
 router.get('/register', (req, res) => {
+    res.set('Content-Type', 'text/plain');
     res.render('register');
 })
 

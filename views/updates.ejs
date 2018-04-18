@@ -4,7 +4,7 @@
 
     <body>
         <% include ./template/nav.ejs %>
-            <form method="PUT"  enctype="multipart/form-data" >
+            <form id="editForm" method="POST" action="/edit"  enctype="multipart/form-data" >
                 <input type="hidden" name="id" id="id" value="">
                 <label>Title:</label>
                 </br>
@@ -20,8 +20,8 @@
                 <input type="file" id="imageupload" name="imageupload" value="" />
                 </br>
                 </br>
-                <button type="submit" name="edit">Submit</button>
+                <button type="submit" id="subEdit">Submit</button>
             </form>
     </body>
-    <script src="update.js"></script>
+    <script src="/JS/update.js"></script>
 </html>
